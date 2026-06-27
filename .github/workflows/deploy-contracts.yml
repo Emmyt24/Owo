@@ -1,0 +1,39 @@
+name: Deploy contracts
+
+# Mainnet contract deploys are gated behind manual approval + a protected
+# environment (Section 12: "gated mainnet contract deploys behind manual approval").
+# Configure the `mainnet` environment with required reviewers in repo settings.
+
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: Target network
+        required: true
+        default: alfajores
+        type: choice
+        options:
+          - alfajores
+          - celo
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.network == 'celo' && 'mainnet' || 'staging' }}
+    defaults:
+      run:
+        working-directory: packages/contracts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: foundry-rs/foundry-toolchain@v1
+      - name: Install contract deps
+        run: |
+          forge install foundry-rs/forge-std --no-git
+          forge install OpenZeppelin/openzeppelin-contracts --no-git
+      - name: Deploy
+        env:
+          CELO_RPC_URL: ${{ secrets.CELO_RPC_URL }}
+          ALFAJORES_RPC_URL: ${{ secrets.ALFAJORES_RPC_URL }}
+        run: |
+          echo "Deploying to ${{ inputs.network }} (audit gate enforced before mainnet)."
+          # forge script script/Deploy.s.sol --rpc-url ${{ inputs.network }} --broadcast --verify

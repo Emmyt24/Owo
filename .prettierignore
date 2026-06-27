@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+out
+.next
+.turbo
+coverage
+pnpm-lock.yaml
+packages/contracts/out
+packages/contracts/cache
+packages/contracts/lib
+
+# Solidity is formatted by `forge fmt`, not Prettier (avoid two formatters fighting).
+*.sol

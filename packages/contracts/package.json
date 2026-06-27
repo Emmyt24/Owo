@@ -1,0 +1,15 @@
+{
+  "name": "@owo/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Owo on-chain contracts (Foundry): OwoEscrow, OwoTreasury, OwoRewards.",
+  "scripts": {
+    "build": "forge build",
+    "test": "forge test -vv",
+    "test:ci": "FOUNDRY_PROFILE=ci forge test -vvv",
+    "lint": "forge fmt --check",
+    "format": "forge fmt",
+    "typecheck": "forge build --sizes",
+    "clean": "forge clean"
+  }
+}
